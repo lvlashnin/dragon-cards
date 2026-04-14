@@ -1,7 +1,9 @@
+import { ControlPanel } from "./components/ControlPanel/ControlPanel";
+
 function App() {
   return (
     <>
-      <h1>hello</h1>
+      <ControlPanel />
     </>
   );
 }

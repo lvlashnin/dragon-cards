@@ -1,0 +1,175 @@
+.control-panel {
+  background-color: #0f172a;
+  border-radius: 12px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  height: 100%;
+  min-height: 500px;
+  color: #f8fafc;
+  font-family: 'Inter', sans-serif;
+}
+
+.section-title {
+  font-size: 14px;
+  font-weight: 600;
+  margin: 0 0 4px 0;
+}
+
+.section-subtitle {
+  font-size: 12px;
+  color: #64748b;
+  margin: 0 0 12px 0;
+}
+
+.input-group {
+  display: flex;
+  align-items: center;
+  background-color: #1e293b;
+  border-radius: 8px;
+  padding: 8px 16px;
+  gap: 12px;
+  transition: opacity 0.3s;
+}
+
+.input-group.disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.input-group input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 600;
+  outline: none;
+  width: 100%;
+}
+
+
+/* .input-group input::-webkit-outer-spin-button,
+.input-group input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+} */
+
+.quick-buttons {
+  display: flex;
+  gap: 4px;
+}
+
+.quick-buttons button {
+  background-color: #334155;
+  border: none;
+  color: #cbd5e1;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.quick-buttons button:hover {
+  background-color: #475569;
+  color: #fff;
+}
+
+.currency {
+  font-weight: 700;
+  color: #e2e8f0;
+}
+
+.risk-selector {
+  display: flex;
+  gap: 8px;
+  background-color: #1e293b;
+  padding: 4px;
+  border-radius: 8px;
+}
+
+.risk-btn {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: #64748b;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 8px 0;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.risk-btn:hover:not(:disabled) {
+  color: #cbd5e1;
+}
+
+.risk-btn.active {
+  background-color: #334155;
+  color: #fff;
+}
+
+.risk-btn.classic {
+  color: #fbbf24; 
+}
+
+.risk-btn.classic.active {
+  background-color: #453511; 
+  color: #fcd34d;
+}
+
+.risk-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+
+.place-bet-btn {
+  background-color: #2563eb;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 16px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+  margin-top: -8px;
+}
+
+.place-bet-btn:hover:not(:disabled) {
+  background-color: #1d4ed8;
+}
+
+.place-bet-btn:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.place-bet-btn:disabled {
+  background-color: #1e293b;
+  color: #64748b;
+  cursor: not-allowed;
+}
+
+
+.balance-box {
+  margin-top: auto; 
+  background-color: #1e293b;
+  border-radius: 8px;
+  padding: 16px;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 600;
+  color: #94a3b8;
+}
+
+.balance-box span {
+  color: #fff;
+  margin-left: 8px;
+  font-family: monospace;
+  font-size: 16px;
+}
