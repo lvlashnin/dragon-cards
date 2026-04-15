@@ -1,62 +1,66 @@
 import React from "react";
 import cx from "classnames";
 import { useGameStore } from "../../store/gameStore";
+import { useBetInput } from "../../hooks/useBetInput";
+import { MIN_BET, RISKS } from "../../config/constants";
 import "./ControlPanel.css";
-import { MAX_BET, MIN_BET, RISKS } from "../../config/constants";
 
 export const ControlPanel: React.FC = () => {
-  const { balance, betAmount, risk, status, setBetAmount, setRisk, placeBet } =
+  const { balance, betAmount, risk, status, setRisk, placeBet } =
     useGameStore();
 
-  const isGameActive = status === "idle";
-  const isGameRevealing = status === "revealing";
-  const isValidBet =
-    betAmount >= MIN_BET && betAmount <= balance && betAmount <= MAX_BET;
+  const { error, isValidBet, handleBetChange, handleBlur, executeQuickAction } =
+    useBetInput();
 
-  const handleBetChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = parseFloat(e.target.value);
-    if (!isNaN(value)) {
-      setBetAmount(value);
-    } else if (e.target.value === "") {
-      setBetAmount(0);
-    }
-  };
-
-  const handleHalf = () =>
-    setBetAmount(Math.max(MIN_BET, Math.floor(betAmount / 2)));
-  const handleDouble = () =>
-    setBetAmount(Math.min(MAX_BET, balance, betAmount * 2));
-  const handleMax = () => setBetAmount(Math.min(MAX_BET, balance));
+  const isIdle = status === "idle";
 
   return (
     <div className="control-panel">
       <div className="section">
-        <h3 className="section-title">Bet Amount</h3>
-        <p className="section-subtitle">Max Bet: {MAX_BET.toFixed(2)}</p>
+        <div className="section-header">
+          <h3 className="section-title">Bet Amount</h3>
+          <h3 className="section-subtitle">Max bet: 1000.00</h3>
+        </div>
 
-        <div className={cx("input-group", { disabled: isGameRevealing })}>
+        <div
+          className={cx("input-group", {
+            disabled: !isIdle,
+            "has-error": error,
+          })}
+        >
           <input
             type="number"
-            value={betAmount || ""}
+            value={betAmount === 0 ? "" : betAmount}
             onChange={handleBetChange}
-            disabled={isGameRevealing}
-            min={MIN_BET}
-            max={MAX_BET}
+            onBlur={handleBlur}
+            disabled={!isIdle}
+            placeholder={`Min: ${MIN_BET}`}
           />
+
           <div className="quick-buttons">
-            <button onClick={handleHalf} disabled={isGameRevealing}>
+            <button
+              onClick={() => executeQuickAction("half")}
+              disabled={!isIdle}
+            >
               1/2
             </button>
-            <button onClick={handleDouble} disabled={isGameRevealing}>
+            <button
+              onClick={() => executeQuickAction("double")}
+              disabled={!isIdle}
+            >
               x2
             </button>
-            <button onClick={handleMax} disabled={isGameRevealing}>
+            <button
+              onClick={() => executeQuickAction("max")}
+              disabled={!isIdle}
+            >
               Max
             </button>
           </div>
           <span className="currency">$</span>
         </div>
       </div>
+      {error && <span className="error-text">{error}</span>}
 
       <div className="section">
         <h3 className="section-title">Risk</h3>
@@ -69,21 +73,20 @@ export const ControlPanel: React.FC = () => {
                 classic: r === "Classic",
               })}
               onClick={() => setRisk(r)}
-              disabled={isGameRevealing}
+              disabled={!isIdle}
             >
               {r}
             </button>
           ))}
         </div>
       </div>
-
       <button
         className={cx("place-bet-btn", {
           "is-loading": status === "revealing",
           "is-result": status === "result",
         })}
         onClick={placeBet}
-        disabled={!isGameActive || !isValidBet || balance === 0}
+        disabled={!isIdle || !isValidBet || balance === 0}
       >
         {status === "revealing" && "Revealing..."}
         {status === "result" && "Check Results!"}

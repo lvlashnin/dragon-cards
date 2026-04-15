@@ -1,7 +1,12 @@
 import { create } from "zustand";
 import type { GameStore } from "../types/game";
 import { getShuffledDragons, getMultipliersForRisk } from "../utils/gameLogic";
-import { INITIAL_BALANCE, CARD_COUNT, MIN_BET } from "../config/constants";
+import {
+  INITIAL_BALANCE,
+  CARD_COUNT,
+  MIN_BET,
+  MAX_BET,
+} from "../config/constants";
 
 export const useGameStore = create<GameStore>((set, get) => ({
   balance: INITIAL_BALANCE,
@@ -88,5 +93,17 @@ export const useGameStore = create<GameStore>((set, get) => ({
       bottomDragons: getShuffledDragons(),
       slotMultipliers: getMultipliersForRisk(risk),
     });
+  },
+
+  halfBet: () => {
+    const current = get().betAmount;
+    set({ betAmount: Math.max(MIN_BET, Math.floor(current / 2)) });
+  },
+  doubleBet: () => {
+    const { betAmount, balance } = get();
+    set({ betAmount: Math.min(MAX_BET, balance, betAmount * 2) });
+  },
+  maxBet: () => {
+    set({ betAmount: Math.min(MAX_BET, get().balance) });
   },
 }));
