@@ -31,7 +31,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
   },
 
   placeBet: () => {
-    const { balance, betAmount, status } = get();
+    const { status, balance, betAmount, finishReveal, resetRound } = get();
 
     if (status !== "idle" || betAmount > balance || betAmount <= 0) return;
 
@@ -39,6 +39,13 @@ export const useGameStore = create<GameStore>((set, get) => ({
       balance: balance - betAmount,
       status: "revealing",
     });
+
+    setTimeout(() => {
+      finishReveal();
+      setTimeout(() => {
+        resetRound();
+      }, 2000);
+    }, 1500);
   },
 
   finishReveal: () => {

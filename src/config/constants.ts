@@ -1,4 +1,4 @@
-import type { DragonType } from "../types/game";
+import type { DragonType, RiskLevel } from "../types/game";
 
 export const INITIAL_BALANCE = 100000.0;
 export const MAX_BET = 1000;
@@ -14,3 +14,5 @@ export const DRAGONS: DragonType[] = [
   "shadow",
   "wind",
 ];
+
+export const RISKS: RiskLevel[] = ["Low", "Medium", "High", "Classic"];
