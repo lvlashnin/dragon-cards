@@ -12,6 +12,7 @@ export interface GameStore {
   slotMultipliers: SlotMultiplier[];
   topDragons: DragonType[];
   bottomDragons: DragonType[];
+  revealedIndices: number[];
   setBetAmount: (amount: number) => void;
   setRisk: (risk: RiskLevel) => void;
   reorderBottomDragons: (newDragons: DragonType[]) => void;

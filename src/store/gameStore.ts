@@ -1,11 +1,13 @@
 import { create } from "zustand";
 import type { GameStore } from "../types/game";
-import { getShuffledDragons, getMultipliersForRisk } from "../utils/gameLogic";
+import { getShuffledDragons } from "../utils/gameLogic";
 import {
   INITIAL_BALANCE,
   CARD_COUNT,
   MIN_BET,
   MAX_BET,
+  RISK_MULTIPLIERS,
+  DRAGONS,
 } from "../config/constants";
 
 export const useGameStore = create<GameStore>((set, get) => ({
@@ -13,10 +15,11 @@ export const useGameStore = create<GameStore>((set, get) => ({
   betAmount: MIN_BET,
   risk: "Classic",
   status: "idle",
+  revealedIndices: [],
 
-  slotMultipliers: getMultipliersForRisk("Classic"),
+  slotMultipliers: RISK_MULTIPLIERS["Classic"],
   topDragons: getShuffledDragons(),
-  bottomDragons: getShuffledDragons(),
+  bottomDragons: DRAGONS,
 
   setBetAmount: (amount) => set({ betAmount: amount }),
 
@@ -25,7 +28,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
     set({
       risk,
-      slotMultipliers: getMultipliersForRisk(risk),
+      slotMultipliers: RISK_MULTIPLIERS[risk],
     });
   },
 
@@ -36,21 +39,39 @@ export const useGameStore = create<GameStore>((set, get) => ({
   },
 
   placeBet: () => {
-    const { status, balance, betAmount, finishReveal, resetRound } = get();
-
+    const { status, balance, betAmount } = get();
     if (status !== "idle" || betAmount > balance || betAmount <= 0) return;
 
     set({
       balance: balance - betAmount,
       status: "revealing",
+      revealedIndices: [],
     });
 
     setTimeout(() => {
-      finishReveal();
-      setTimeout(() => {
-        resetRound();
-      }, 2000);
-    }, 1500);
+      set({ topDragons: getShuffledDragons() });
+    }, 400);
+
+    for (let i = 0; i < CARD_COUNT; i++) {
+      setTimeout(
+        () => {
+          set((state) => ({
+            revealedIndices: [...state.revealedIndices, i],
+          }));
+
+          if (i === CARD_COUNT - 1) {
+            setTimeout(() => {
+              get().finishReveal();
+
+              setTimeout(() => {
+                get().resetRound();
+              }, 2000);
+            }, 700);
+          }
+        },
+        500 + i * 600,
+      );
+    }
   },
 
   finishReveal: () => {
@@ -86,12 +107,9 @@ export const useGameStore = create<GameStore>((set, get) => ({
   },
 
   resetRound: () => {
-    const { risk } = get();
     set({
       status: "idle",
-      topDragons: getShuffledDragons(),
-      bottomDragons: getShuffledDragons(),
-      slotMultipliers: getMultipliersForRisk(risk),
+      revealedIndices: [],
     });
   },
 

@@ -60,7 +60,6 @@ export const ControlPanel: React.FC = () => {
           <span className="currency">$</span>
         </div>
       </div>
-      {error && <span className="error-text">{error}</span>}
 
       <div className="section">
         <h3 className="section-title">Risk</h3>
@@ -92,6 +91,7 @@ export const ControlPanel: React.FC = () => {
         {status === "result" && "Check Results!"}
         {status === "idle" && "Place Bet"}
       </button>
+      {error && <span className="error-text">{error}</span>}
 
       <div className="balance-box">
         Balance: <span>{balance.toFixed(2)}</span>

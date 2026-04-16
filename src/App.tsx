@@ -1,11 +1,14 @@
 import { ControlPanel } from "./components/ControlPanel/ControlPanel";
-import { GameBoard } from "./components/GameBoard";
+import { GameBoard } from "./components/GameBoard/GameBoard";
+import "./App.css";
 
 function App() {
   return (
     <>
-      <ControlPanel />
-      <GameBoard />
+      <div className="app-container">
+        <ControlPanel />
+        <GameBoard />
+      </div>
     </>
   );
 }
