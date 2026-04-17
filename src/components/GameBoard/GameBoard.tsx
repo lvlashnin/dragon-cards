@@ -13,6 +13,8 @@ export const GameBoard: React.FC = () => {
     status,
     revealedIndices,
     swapBottomDragons,
+    isMuted,
+    toggleMute,
   } = useGameStore();
 
   const isIdle = status === "idle";
@@ -62,6 +64,12 @@ export const GameBoard: React.FC = () => {
 
   return (
     <div className="game-board">
+      <button className="mute-button" onClick={toggleMute}>
+        <img
+          src={isMuted ? "/images/sound-off.svg" : "/images/sound-on.svg"}
+          alt={isMuted ? "Sound Off" : "Sound On"}
+        />
+      </button>
       <div className="board-section">
         <div className="cards-row">
           {topDragons.map((dragon, index) => {

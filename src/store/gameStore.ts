@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { persist } from "zustand/middleware";
 import type { GameStore } from "../types/game";
 import { getShuffledDragons } from "../utils/gameLogic";
 import {
@@ -11,140 +12,156 @@ import {
 } from "../config/constants";
 import { playSound, setMuteState } from "../utils/soundManager";
 
-export const useGameStore = create<GameStore>((set, get) => ({
-  balance: INITIAL_BALANCE,
-  betAmount: MIN_BET,
-  risk: "Classic",
-  status: "idle",
-  revealedIndices: [],
-  isMuted: false,
-
-  slotMultipliers: RISK_MULTIPLIERS["Classic"],
-  topDragons: getShuffledDragons(),
-  bottomDragons: DRAGONS,
-
-  setBetAmount: (amount) => set({ betAmount: amount }),
-
-  setRisk: (risk) => {
-    if (get().status !== "idle") return;
-    playSound("drop");
-    set({
-      risk,
-      slotMultipliers: RISK_MULTIPLIERS[risk],
-    });
-  },
-
-  swapBottomDragons: (dragIndex: number, dropIndex: number) => {
-    const { status, bottomDragons } = get();
-    if (status !== "idle" || dragIndex === dropIndex) return;
-
-    const newDragons = [...bottomDragons];
-    const temp = newDragons[dragIndex];
-
-    newDragons[dragIndex] = newDragons[dropIndex];
-    newDragons[dropIndex] = temp;
-
-    set({ bottomDragons: newDragons });
-  },
-
-  placeBet: () => {
-    const { status, balance, betAmount } = get();
-    playSound("drop");
-    if (status !== "idle" || betAmount > balance || betAmount <= 0) return;
-
-    set({
-      balance: balance - betAmount,
-      status: "revealing",
-      revealedIndices: [],
-    });
-
-    setTimeout(() => {
-      set({ topDragons: getShuffledDragons() });
-    }, 400);
-
-    for (let i = 0; i < CARD_COUNT; i++) {
-      setTimeout(
-        () => {
-          playSound("flip");
-          set((state) => ({
-            revealedIndices: [...state.revealedIndices, i],
-          }));
-
-          if (i === CARD_COUNT - 1) {
-            setTimeout(() => {
-              get().finishReveal();
-
-              setTimeout(() => {
-                get().resetRound();
-              }, 2000);
-            }, 700);
-          }
-        },
-        500 + i * 600,
-      );
-    }
-  },
-
-  finishReveal: () => {
-    const { betAmount, balance, topDragons, bottomDragons, slotMultipliers } =
-      get();
-
-    let totalMultiplier = 0;
-    let isLost = false;
-    let hasAnyMatch = false;
-
-    for (let i = 0; i < CARD_COUNT; i++) {
-      if (topDragons[i] === bottomDragons[i]) {
-        hasAnyMatch = true;
-
-        if (slotMultipliers[i] === "LOST") {
-          isLost = true;
-          break;
-        } else {
-          totalMultiplier += slotMultipliers[i] as number;
-        }
-      }
-    }
-
-    if (isLost || !hasAnyMatch) {
-      playSound("lose");
-      set({ status: "result" });
-    } else {
-      playSound("win");
-      const winAmount = betAmount * totalMultiplier;
-      set({
-        status: "result",
-        balance: balance + winAmount,
-      });
-    }
-  },
-
-  resetRound: () => {
-    set({
+export const useGameStore = create<GameStore>()(
+  persist(
+    (set, get) => ({
+      balance: INITIAL_BALANCE,
+      betAmount: MIN_BET,
+      risk: "Classic",
       status: "idle",
       revealedIndices: [],
-    });
-  },
+      isMuted: false,
 
-  halfBet: () => {
-    playSound("drop");
-    const current = get().betAmount;
-    set({ betAmount: Math.max(MIN_BET, Math.floor(current / 2)) });
-  },
-  doubleBet: () => {
-    playSound("drop");
-    const { betAmount, balance } = get();
-    set({ betAmount: Math.min(MAX_BET, balance, betAmount * 2) });
-  },
-  maxBet: () => {
-    playSound("drop");
-    set({ betAmount: Math.min(MAX_BET, get().balance) });
-  },
+      slotMultipliers: RISK_MULTIPLIERS["Classic"],
+      topDragons: getShuffledDragons(),
+      bottomDragons: DRAGONS,
 
-  toggleMute: () => {
-    const newMutedState = !get().isMuted;
+      setBetAmount: (amount) => set({ betAmount: amount }),
 
-    set({ isMuted: newMutedState });
-    setMuteState(newMutedState);
-  },
-}));
+      setRisk: (risk) => {
+        if (get().status !== "idle") return;
+        playSound("drop");
+        set({
+          risk,
+          slotMultipliers: RISK_MULTIPLIERS[risk],
+        });
+      },
+
+      swapBottomDragons: (dragIndex: number, dropIndex: number) => {
+        const { status, bottomDragons } = get();
+        if (status !== "idle" || dragIndex === dropIndex) return;
+
+        const newDragons = [...bottomDragons];
+        const temp = newDragons[dragIndex];
+
+        newDragons[dragIndex] = newDragons[dropIndex];
+        newDragons[dropIndex] = temp;
+
+        set({ bottomDragons: newDragons });
+      },
+
+      placeBet: () => {
+        const { status, balance, betAmount } = get();
+        playSound("drop");
+        if (status !== "idle" || betAmount > balance || betAmount <= 0) return;
+
+        set({
+          balance: balance - betAmount,
+          status: "revealing",
+          revealedIndices: [],
+        });
+
+        setTimeout(() => {
+          set({ topDragons: getShuffledDragons() });
+        }, 400);
+
+        for (let i = 0; i < CARD_COUNT; i++) {
+          setTimeout(
+            () => {
+              playSound("flip");
+              set((state) => ({
+                revealedIndices: [...state.revealedIndices, i],
+              }));
+
+              if (i === CARD_COUNT - 1) {
+                setTimeout(() => {
+                  get().finishReveal();
+
+                  setTimeout(() => {
+                    get().resetRound();
+                  }, 2000);
+                }, 700);
+              }
+            },
+            500 + i * 600,
+          );
+        }
+      },
+
+      finishReveal: () => {
+        const {
+          betAmount,
+          balance,
+          topDragons,
+          bottomDragons,
+          slotMultipliers,
+        } = get();
+
+        let totalMultiplier = 0;
+        let isLost = false;
+        let hasAnyMatch = false;
+
+        for (let i = 0; i < CARD_COUNT; i++) {
+          if (topDragons[i] === bottomDragons[i]) {
+            hasAnyMatch = true;
+
+            if (slotMultipliers[i] === "LOST") {
+              isLost = true;
+              break;
+            } else {
+              totalMultiplier += slotMultipliers[i] as number;
+            }
+          }
+        }
+
+        if (isLost || !hasAnyMatch) {
+          playSound("lose");
+          set({ status: "result" });
+        } else {
+          playSound("win");
+          const winAmount = betAmount * totalMultiplier;
+          set({
+            status: "result",
+            balance: balance + winAmount,
+          });
+        }
+      },
+
+      resetRound: () => {
+        set({
+          status: "idle",
+          revealedIndices: [],
+        });
+      },
+
+      halfBet: () => {
+        playSound("drop");
+        const current = get().betAmount;
+        set({ betAmount: Math.max(MIN_BET, Math.floor(current / 2)) });
+      },
+      doubleBet: () => {
+        playSound("drop");
+        const { betAmount, balance } = get();
+        set({ betAmount: Math.min(MAX_BET, balance, betAmount * 2) });
+      },
+      maxBet: () => {
+        playSound("drop");
+        set({ betAmount: Math.min(MAX_BET, get().balance) });
+      },
+
+      toggleMute: () => {
+        const newMutedState = !get().isMuted;
+
+        set({ isMuted: newMutedState });
+        setMuteState(newMutedState);
+      },
+    }),
+    {
+      name: "dragon-cards-storage",
+      partialize: (state) => ({
+        balance: state.balance,
+        risk: state.risk,
+      }),
+    },
+  ),
+);
