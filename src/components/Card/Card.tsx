@@ -28,7 +28,7 @@ export const Card: React.FC<CardProps> = ({
         <div className="card-face card-front">
           {dragon && (
             <img
-              src={`/images/${dragon}.png`}
+              src={`/images/${dragon}.webp`}
               alt={`${dragon} dragon`}
               className="card-image"
             />
