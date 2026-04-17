@@ -13,6 +13,7 @@ export interface GameStore {
   topDragons: DragonType[];
   bottomDragons: DragonType[];
   revealedIndices: number[];
+  isMuted: boolean;
   setBetAmount: (amount: number) => void;
   setRisk: (risk: RiskLevel) => void;
   swapBottomDragons: (dragIndex: number, dropIndex: number) => void;
@@ -22,4 +23,5 @@ export interface GameStore {
   halfBet: () => void;
   doubleBet: () => void;
   maxBet: () => void;
+  toggleMute: () => void;
 }

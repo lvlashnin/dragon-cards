@@ -1,9 +1,15 @@
+body {
+  margin: 0;  
+  background-color: #0b1120; 
+  color: #ffffff;
+}
+
 .app-container {
   display: flex;
   flex-direction: row;   
   max-width: 1200px;
   margin: 0 auto;
-  min-height: 100vh;
+  min-height: 555px;
   padding: 40px 20px;
   align-items: stretch; 
 }

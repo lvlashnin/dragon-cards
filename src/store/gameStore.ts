@@ -9,6 +9,7 @@ import {
   RISK_MULTIPLIERS,
   DRAGONS,
 } from "../config/constants";
+import { playSound, setMuteState } from "../utils/soundManager";
 
 export const useGameStore = create<GameStore>((set, get) => ({
   balance: INITIAL_BALANCE,
@@ -16,6 +17,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
   risk: "Classic",
   status: "idle",
   revealedIndices: [],
+  isMuted: false,
 
   slotMultipliers: RISK_MULTIPLIERS["Classic"],
   topDragons: getShuffledDragons(),
@@ -62,6 +64,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
     for (let i = 0; i < CARD_COUNT; i++) {
       setTimeout(
         () => {
+          playSound("flip");
           set((state) => ({
             revealedIndices: [...state.revealedIndices, i],
           }));
@@ -103,8 +106,10 @@ export const useGameStore = create<GameStore>((set, get) => ({
     }
 
     if (isLost || !hasAnyMatch) {
+      playSound("lose");
       set({ status: "result" });
     } else {
+      playSound("win");
       const winAmount = betAmount * totalMultiplier;
       set({
         status: "result",
@@ -130,5 +135,12 @@ export const useGameStore = create<GameStore>((set, get) => ({
   },
   maxBet: () => {
     set({ betAmount: Math.min(MAX_BET, get().balance) });
+  },
+
+  toggleMute: () => {
+    const newMutedState = !get().isMuted;
+
+    set({ isMuted: newMutedState });
+    setMuteState(newMutedState);
   },
 }));

@@ -49,8 +49,10 @@
 
 
 .card-back {
-  background: linear-gradient(135deg, #1e293b, #334155);
-  color: #475569;
+  background-image: url('/images/backface.png');
+  background-size: cover; 
+  background-position: center; 
+  background-repeat: no-repeat;  
 }
 
 .dragon-placeholder {

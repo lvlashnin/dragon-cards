@@ -2,6 +2,7 @@ import React from "react";
 import cx from "classnames";
 import { useGameStore } from "../../store/gameStore";
 import { Card } from "../Card/Card";
+import { playSound } from "../../utils/soundManager";
 import "./GameBoard.css";
 
 export const GameBoard: React.FC = () => {
@@ -36,6 +37,7 @@ export const GameBoard: React.FC = () => {
     }
     e.dataTransfer.setData("draggedCardIndex", index.toString());
     e.dataTransfer.effectAllowed = "move";
+    playSound("grab");
   };
 
   const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
@@ -55,6 +57,7 @@ export const GameBoard: React.FC = () => {
     if (!dragIndexString) return;
     const dragIndex = parseInt(dragIndexString, 10);
     swapBottomDragons(dragIndex, dropIndex);
+    playSound("drop");
   };
 
   return (
