@@ -26,12 +26,16 @@ export const Card: React.FC<CardProps> = ({
     >
       <div className={cx("card-inner", { "is-flipped": isFlipped })}>
         <div className="card-face card-front">
-          {dragon && <span className="dragon-placeholder">🐉 {dragon}</span>}
+          {dragon && (
+            <img
+              src={`/images/${dragon}.png`}
+              alt={`${dragon} dragon`}
+              className="card-image"
+            />
+          )}
         </div>
 
-        <div className="card-face card-back">
-          <span className="card-logo">DC</span>
-        </div>
+        <div className="card-face card-back"></div>
       </div>
     </div>
   );

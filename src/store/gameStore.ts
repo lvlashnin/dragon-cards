@@ -27,7 +27,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
   setRisk: (risk) => {
     if (get().status !== "idle") return;
-
+    playSound("drop");
     set({
       risk,
       slotMultipliers: RISK_MULTIPLIERS[risk],
@@ -49,6 +49,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
   placeBet: () => {
     const { status, balance, betAmount } = get();
+    playSound("drop");
     if (status !== "idle" || betAmount > balance || betAmount <= 0) return;
 
     set({
@@ -126,14 +127,17 @@ export const useGameStore = create<GameStore>((set, get) => ({
   },
 
   halfBet: () => {
+    playSound("drop");
     const current = get().betAmount;
     set({ betAmount: Math.max(MIN_BET, Math.floor(current / 2)) });
   },
   doubleBet: () => {
+    playSound("drop");
     const { betAmount, balance } = get();
     set({ betAmount: Math.min(MAX_BET, balance, betAmount * 2) });
   },
   maxBet: () => {
+    playSound("drop");
     set({ betAmount: Math.min(MAX_BET, get().balance) });
   },
 
