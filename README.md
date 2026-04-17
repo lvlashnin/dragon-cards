@@ -1,73 +1,50 @@
-# React + TypeScript + Vite
+# 🐉 Dragon Cards
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A dynamic, interactive betting mini-game built with React and Zustand. Match the dragons, manage your risk, and multiply your balance!
+DEMO:[https://dragon-cards-kappa.vercel.app/]
 
-Currently, two official plugins are available:
+## 🎮 About the Game
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+Dragon Cards is a slot-style prediction game. The player starts with a base balance and tries to guess the sequence of dragons that will be revealed in the top row. Before placing a bet, players can reorder their bottom cards using Drag & Drop to match their predictions with the highest multipliers.
 
-## React Compiler
+## ✨ Key Features
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- **State Machine Logic:** Strict game phases (`idle`, `revealing`, `result`) managed by Zustand to prevent bugged interactions during animations.
+- **Native HTML5 Drag & Drop:** Smooth, dependency-free card reordering mechanic.
+- **Dynamic Multipliers & Risk Levels:** Four risk profiles (Low, Medium, High, Classic) dynamically calculate win potentials.
+- **Custom Sound Manager:** Integrated Web Audio API for immersive sound effects (card flips, wins, interactions) with a global mute toggle.
+- **Data Persistence:** Balance, selected risk level, and audio settings are saved in `localStorage` via Zustand's `persist` middleware.
+- **Responsive UI:** Fully adaptive design that shifts the layout gracefully for mobile devices.
 
-## Expanding the ESLint configuration
+## 🛠️ Tech Stack
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- **Frontend:** React 19 (Functional Components, Hooks)
+- **State Management:** Zustand
+- **Language:** TypeScript
+- **Styling:** CSS3 (Flexbox, Media Queries, CSS Modules/Classnames)
+- **Build Tool:** Vite
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## 🚀 Getting Started
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+### Prerequisites
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+Make sure you have [Node.js](https://nodejs.org/) installed on your machine.
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### Installation
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+1. Clone the repository:
+   ```bash
+   git clone [https://github.com/lvlashnin/dragon-cards.git](https://github.com/lvlashnin/dragon-cards.git)
+   Navigate to the project directory:
+   ```
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+Bash
+cd dragon-cards
+Install dependencies:
+
+Bash
+npm install
+Start the development server:
+
+Bash
+npm run dev
