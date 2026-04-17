@@ -52,6 +52,7 @@
   font-weight: 800;
   text-align: center;
   transition: all 0.3s ease;
+  font-family: MedievalSharp, cursive;
 }
 
 .multiplier-badge.text-green {
