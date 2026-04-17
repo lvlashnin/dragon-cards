@@ -32,10 +32,17 @@ export const useGameStore = create<GameStore>((set, get) => ({
     });
   },
 
-  reorderBottomDragons: (newDragons) => {
-    if (get().status === "idle") {
-      set({ bottomDragons: newDragons });
-    }
+  swapBottomDragons: (dragIndex: number, dropIndex: number) => {
+    const { status, bottomDragons } = get();
+    if (status !== "idle" || dragIndex === dropIndex) return;
+
+    const newDragons = [...bottomDragons];
+    const temp = newDragons[dragIndex];
+
+    newDragons[dragIndex] = newDragons[dropIndex];
+    newDragons[dropIndex] = temp;
+
+    set({ bottomDragons: newDragons });
   },
 
   placeBet: () => {

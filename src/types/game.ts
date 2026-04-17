@@ -15,7 +15,7 @@ export interface GameStore {
   revealedIndices: number[];
   setBetAmount: (amount: number) => void;
   setRisk: (risk: RiskLevel) => void;
-  reorderBottomDragons: (newDragons: DragonType[]) => void;
+  swapBottomDragons: (dragIndex: number, dropIndex: number) => void;
   placeBet: () => void;
   finishReveal: () => void;
   resetRound: () => void;

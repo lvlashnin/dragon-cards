@@ -69,7 +69,6 @@ export const ControlPanel: React.FC = () => {
               key={r}
               className={cx("risk-btn", {
                 active: risk === r,
-                classic: r === "Classic",
               })}
               onClick={() => setRisk(r)}
               disabled={!isIdle}

@@ -11,6 +11,7 @@ export const GameBoard: React.FC = () => {
     slotMultipliers,
     status,
     revealedIndices,
+    swapBottomDragons,
   } = useGameStore();
 
   const isIdle = status === "idle";
@@ -23,6 +24,37 @@ export const GameBoard: React.FC = () => {
     if (!isMatch) return "dim";
     if (slotMultipliers[index] === "LOST") return "fatal";
     return "win";
+  };
+
+  const handleDragStart = (
+    e: React.DragEvent<HTMLDivElement>,
+    index: number,
+  ) => {
+    if (!isIdle) {
+      e.preventDefault();
+      return;
+    }
+    e.dataTransfer.setData("draggedCardIndex", index.toString());
+    e.dataTransfer.effectAllowed = "move";
+  };
+
+  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
+    if (!isIdle) return;
+
+    e.preventDefault();
+    e.dataTransfer.dropEffect = "move";
+  };
+
+  const handleDrop = (
+    e: React.DragEvent<HTMLDivElement>,
+    dropIndex: number,
+  ) => {
+    if (!isIdle) return;
+    e.preventDefault();
+    const dragIndexString = e.dataTransfer.getData("draggedCardIndex");
+    if (!dragIndexString) return;
+    const dragIndex = parseInt(dragIndexString, 10);
+    swapBottomDragons(dragIndex, dropIndex);
   };
 
   return (
@@ -53,7 +85,13 @@ export const GameBoard: React.FC = () => {
             const colState = getColumnState(index);
 
             return (
-              <div key={`bottom-${index}`} className="card-slot">
+              <div
+                key={`bottom-${index}`}
+                className="card-slot"
+                onDragStart={(e) => handleDragStart(e, index)}
+                onDragOver={handleDragOver}
+                onDrop={(e) => handleDrop(e, index)}
+              >
                 <Card dragon={dragon} isFlipped={true} isDraggable={isIdle} />
 
                 <div

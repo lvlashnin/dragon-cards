@@ -20,6 +20,6 @@ export const RISKS: RiskLevel[] = ["Low", "Medium", "High", "Classic"];
 export const RISK_MULTIPLIERS: Record<RiskLevel, SlotMultiplier[]> = {
   Low: [1.2, 1.5, "LOST", 2, 1.8, 3],
   Medium: [1.5, "LOST", 2, 3, "LOST", 5],
-  High: ["LOST", 2, "LOST", 5, "LOST", 10],
+  High: ["LOST", "LOST", "LOST", 25, "LOST", 50],
   Classic: ["LOST", 3.5, 4, "LOST", 10, 7],
 };
