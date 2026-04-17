@@ -4,6 +4,7 @@ import { useGameStore } from "../../store/gameStore";
 import { useBetInput } from "../../hooks/useBetInput";
 import { MIN_BET, RISKS } from "../../config/constants";
 import "./ControlPanel.css";
+import { Balance } from "./Balance";
 
 export const ControlPanel: React.FC = () => {
   const { balance, betAmount, risk, status, setRisk, placeBet } =
@@ -92,9 +93,7 @@ export const ControlPanel: React.FC = () => {
       </button>
       {error && <span className="error-text">{error}</span>}
 
-      <div className="balance-box">
-        Balance: <span>{balance.toFixed(2)}</span>
-      </div>
+      <Balance className="desktop-balance" />
     </div>
   );
 };

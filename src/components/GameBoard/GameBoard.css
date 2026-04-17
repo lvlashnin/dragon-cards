@@ -3,9 +3,9 @@
   display: flex;
   position: relative;
   flex-direction: column;
-  justify-content: center;  
+  justify-content: space-between;  
   gap: 40px;
-  padding: 20px;
+  padding: 10px 20px 60px;
   background-color: #0b1120;
   border-radius: 0 12px 12px 0;
   background-image: url('/images/board-bg.png'); 
@@ -68,8 +68,7 @@
   opacity: 0.3;
 }
 
-.mute-button {
-  position: absolute;
+.mute-button {  
   top: 24px;
   left: 24px;
   width: 48px;

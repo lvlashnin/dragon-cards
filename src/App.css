@@ -14,9 +14,17 @@ body {
   align-items: stretch; 
 }
 
+.mobile-balance {
+  display: none; 
+  margin-bottom: 16px;  
+}
+
 @media (max-width: 900px) {
   .app-container {
-    flex-direction: column; 
-    gap: 20px;
+    flex-direction: column-reverse;     
+    gap: 20px;    
+  }
+  .mobile-balance {
+    display:block;     
   }
 }

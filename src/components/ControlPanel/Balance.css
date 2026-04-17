@@ -1,0 +1,18 @@
+.balance-box {  
+  margin-top: auto; 
+  background-color: #1e293b;
+  border-radius: 8px;
+  padding: 16px;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 600;
+  color: #94a3b8;  ;
+  font-family: 'Inter', sans-serif;
+}
+
+.balance-box span {
+  color: #fff;
+  margin-left: 8px;
+  font-family: monospace;
+  font-size: 16px;
+}
