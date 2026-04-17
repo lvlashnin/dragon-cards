@@ -102,5 +102,16 @@
 @media (max-width: 900px) {
   .game-board {
     border-radius: 12px;
+    padding: 16px;
+    gap: 20px;
   }
+
+  .cards-row {       
+     gap: 4px;
+  }
+
+  .card-slot {        
+    min-width: 0; 
+  }
+  
 }
