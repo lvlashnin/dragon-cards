@@ -11,6 +11,7 @@ import {
   DRAGONS,
 } from "../config/constants";
 import { playSound, setMuteState } from "../utils/soundManager";
+import { delay } from "../utils/helpers";
 
 export const useGameStore = create<GameStore>()(
   persist(
@@ -52,8 +53,8 @@ export const useGameStore = create<GameStore>()(
 
       placeBet: () => {
         const { status, balance, betAmount } = get();
-        playSound("drop");
         if (status !== "idle" || betAmount > balance || betAmount <= 0) return;
+        playSound("drop");
 
         set({
           balance: balance - betAmount,
@@ -61,31 +62,33 @@ export const useGameStore = create<GameStore>()(
           revealedIndices: [],
         });
 
-        setTimeout(() => {
-          set({ topDragons: getShuffledDragons() });
-        }, 400);
+        get().processRound();
+      },
+
+      processRound: async () => {
+        await delay(400);
+
+        set({ topDragons: getShuffledDragons() });
+
+        await delay(200);
 
         for (let i = 0; i < CARD_COUNT; i++) {
-          setTimeout(
-            () => {
-              playSound("flip");
-              set((state) => ({
-                revealedIndices: [...state.revealedIndices, i],
-              }));
+          await delay(600);
 
-              if (i === CARD_COUNT - 1) {
-                setTimeout(() => {
-                  get().finishReveal();
+          playSound("flip");
 
-                  setTimeout(() => {
-                    get().resetRound();
-                  }, 2000);
-                }, 700);
-              }
-            },
-            500 + i * 600,
-          );
+          set((state) => ({
+            revealedIndices: [...state.revealedIndices, i],
+          }));
         }
+
+        await delay(700);
+
+        get().finishReveal();
+
+        await delay(2000);
+
+        get().resetRound();
       },
 
       finishReveal: () => {
@@ -161,6 +164,8 @@ export const useGameStore = create<GameStore>()(
       partialize: (state) => ({
         balance: state.balance,
         risk: state.risk,
+        slotMultipliers: state.slotMultipliers,
+        isMuted: state.isMuted,
       }),
     },
   ),

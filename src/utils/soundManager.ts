@@ -34,6 +34,6 @@ export const playSound = (name: keyof typeof sounds) => {
   clone.volume = sound.volume;
 
   clone.play().catch((err) => {
-    console.warn(`${name} sound blocked, need to cklik somewhere`, err);
+    console.warn(`${name} sound blocked, need to click somewhere`, err);
   });
 };

@@ -18,6 +18,7 @@ export interface GameStore {
   setRisk: (risk: RiskLevel) => void;
   swapBottomDragons: (dragIndex: number, dropIndex: number) => void;
   placeBet: () => void;
+  processRound: () => void;
   finishReveal: () => void;
   resetRound: () => void;
   halfBet: () => void;

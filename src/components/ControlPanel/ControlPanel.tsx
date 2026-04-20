@@ -2,13 +2,17 @@ import React from "react";
 import cx from "classnames";
 import { useGameStore } from "../../store/gameStore";
 import { useBetInput } from "../../hooks/useBetInput";
-import { MIN_BET, RISKS } from "../../config/constants";
+import { MIN_BET, RISKS, MAX_BET } from "../../config/constants";
 import "./ControlPanel.css";
 import { Balance } from "./Balance";
 
 export const ControlPanel: React.FC = () => {
-  const { balance, betAmount, risk, status, setRisk, placeBet } =
-    useGameStore();
+  const balance = useGameStore((state) => state.balance);
+  const betAmount = useGameStore((state) => state.betAmount);
+  const risk = useGameStore((state) => state.risk);
+  const status = useGameStore((state) => state.status);
+  const setRisk = useGameStore((state) => state.setRisk);
+  const placeBet = useGameStore((state) => state.placeBet);
 
   const { error, isValidBet, handleBetChange, handleBlur, executeQuickAction } =
     useBetInput();
@@ -20,7 +24,7 @@ export const ControlPanel: React.FC = () => {
       <div className="section">
         <div className="section-header">
           <h3 className="section-title">Bet Amount</h3>
-          <h3 className="section-subtitle">Max bet: 1000.00</h3>
+          <h3 className="section-subtitle">Max bet: ${MAX_BET}</h3>
         </div>
 
         <div

@@ -36,15 +36,18 @@
   align-items: center;
   justify-content: center;
   border: 1px solid #1e293b;
-  font-size: 14px;
-  font-weight: 600;
+  
 }
 
+.card-front {  
+  transform: rotateY(180deg);  
+}
 
-.card-front {
-  background: linear-gradient(135deg, #1e3a5f, #0f172a);
-  transform: rotateY(180deg);
-  color: #fff;
+.card-back {
+  background-image: url('/images/backface.webp');
+  background-size: cover; 
+  background-position: center; 
+  background-repeat: no-repeat;  
 }
 
 .card-image {
@@ -55,18 +58,6 @@
   pointer-events: none; 
   user-select: none;
   -webkit-user-drag: none; 
-}
-
-
-.card-back {
-  background-image: url('/images/backface.webp');
-  background-size: cover; 
-  background-position: center; 
-  background-repeat: no-repeat;  
-}
-
-.dragon-placeholder {
-  text-transform: capitalize;
 }
 
 .card.is-dim {
